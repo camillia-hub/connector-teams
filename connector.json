@@ -1,0 +1,14 @@
+{
+  "entry": "index.js",
+  "triggers": [
+    { "type": "poll", "schedule": "*/5 * * * *" }
+  ],
+  "grants": ["create-task"],
+  "secrets": [
+    { "key": "MSGRAPH_TENANT_ID", "description": "Microsoft Entra tenant id of the app registration.", "required": true },
+    { "key": "MSGRAPH_CLIENT_ID", "description": "Application (client) id of the app registration.", "required": true },
+    { "key": "MSGRAPH_CLIENT_SECRET", "description": "Client secret of the app registration (ChannelMessage.Read.All application permission).", "required": true },
+    { "key": "MSGRAPH_TEAM_ID", "description": "The Teams team (group) id to read.", "required": true },
+    { "key": "MSGRAPH_CHANNEL_IDS", "description": "Comma-separated channel ids of the team to poll (e.g. 19:abc…@thread.tacv2).", "required": true }
+  ]
+}

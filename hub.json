@@ -1,0 +1,1 @@
+{"name": "Teams Connector", "slug": "connector-teams", "kind": "connector", "description": "Creates Camillia tasks from Microsoft Teams channel messages, polled through Microsoft Graph delta queries.", "version": "1.0.0", "priceMinor": 0, "currency": "USD", "include": ["connector.json", "index.js", "package.json"]}
