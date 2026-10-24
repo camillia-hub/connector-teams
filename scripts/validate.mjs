@@ -1,5 +1,5 @@
 // Validates the extension layout the Camillia hub expects from a connector:
-// hub.json metadata, connector.json manifest rules (same as the server-side
+// extension.json metadata, connector.json manifest rules (same as the server-side
 // scan), and the included files. Run with `node scripts/validate.mjs`.
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -39,15 +39,15 @@ function isValidCron(expression) {
   return fields.every((field, i) => isValidCronField(field, ranges[i][0], ranges[i][1]));
 }
 
-// --- hub.json ---------------------------------------------------------------
-const hub = readJson("hub.json");
+// --- extension.json ---------------------------------------------------------------
+const hub = readJson("extension.json");
 if (hub) {
-  if (!hub.name || !hub.slug) fail("hub.json needs name and slug.");
-  if (!KNOWN_KINDS.includes(hub.kind)) fail(`hub.json kind '${hub.kind}' is unknown (known: ${KNOWN_KINDS.join(", ")}).`);
-  if (hub.kind !== "connector") fail(`this repository template is a connector; hub.json says '${hub.kind}'.`);
-  if (!Array.isArray(hub.include) || hub.include.length === 0) fail("hub.json include lists the published files.");
+  if (!hub.name || !hub.slug) fail("extension.json needs name and slug.");
+  if (!KNOWN_KINDS.includes(hub.kind)) fail(`extension.json kind '${hub.kind}' is unknown (known: ${KNOWN_KINDS.join(", ")}).`);
+  if (hub.kind !== "connector") fail(`this repository template is a connector; extension.json says '${hub.kind}'.`);
+  if (!Array.isArray(hub.include) || hub.include.length === 0) fail("extension.json include lists the published files.");
   for (const file of hub.include ?? []) {
-    if (!existsSync(join(root, file))) fail(`hub.json includes '${file}' but the file does not exist.`);
+    if (!existsSync(join(root, file))) fail(`extension.json includes '${file}' but the file does not exist.`);
   }
 }
 
@@ -57,7 +57,7 @@ if (manifest) {
   const entry = (manifest.entry ?? "index.js").trim();
   if (entry.includes("..") || entry.startsWith("/")) fail(`entry '${entry}' is not a safe relative path.`);
   if (!existsSync(join(root, entry))) fail(`entry '${entry}' does not exist.`);
-  if (!hub?.include?.includes(entry)) fail(`entry '${entry}' must be listed in hub.json include.`);
+  if (!hub?.include?.includes(entry)) fail(`entry '${entry}' must be listed in extension.json include.`);
 
   const triggers = Array.isArray(manifest.triggers) ? manifest.triggers : [];
   if (triggers.length === 0) fail("a connector declares at least one trigger.");
